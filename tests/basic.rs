@@ -27,6 +27,14 @@ speculate! {
         i = 5;
     }
 
+    async it "is asynchronous!" {
+        async_std::task::spawn(async {
+            i += 1;
+        }).await;
+        assert_eq!(i, 2);
+        i = 5;
+    }
+
     describe "something" {
         before {
             assert_eq!(i, zero() + 1);
