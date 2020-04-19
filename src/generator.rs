@@ -68,16 +68,16 @@ impl Generate for It {
 
         if self.is_async {
             quote_spanned!(name.span() =>
-                #[test]
+                #[async_attributes::test]
                 #(#attributes)*
-                fn #name() {
+                async fn #name() {
                     #(#stmts)*
                 }
             )
         } else {
             quote_spanned!(name.span() =>
-                #[async_attributes::test]
                 #(#attributes)*
+                #[test]
                 fn #name() {
                     #(#stmts)*
                 }

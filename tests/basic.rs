@@ -1,8 +1,12 @@
 extern crate speculate as other_speculate;
 use other_speculate::speculate;
 
-pub fn zero() -> u32 {
+fn zero() -> u32 {
     0
+}
+
+async fn one() -> u32 {
+    1
 }
 
 speculate! {
@@ -28,10 +32,7 @@ speculate! {
     }
 
     async it "is asynchronous!" {
-        async_std::task::spawn(async {
-            i += 1;
-        }).await;
-        assert_eq!(i, 2);
+        assert_eq!(i, one().await);
         i = 5;
     }
 

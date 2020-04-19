@@ -106,7 +106,7 @@ impl Synom for It {
     named!(parse -> Self, do_parse!(
         attrs:   many0!(call!(syn::Attribute::parse_outer))         >>
 
-        r#async: option!(alt!(keyword!(async)))        >>
+        r#async: option!(alt!(keyword!(async)))                     >>
         alt!(custom_keyword!(it) | custom_keyword!(test))           >>
 
         name:    syn!(syn::LitStr)                                  >>
