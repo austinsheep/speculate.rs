@@ -1,5 +1,5 @@
 use proc_macro2::Span;
-use syn::{alt, braces, call, custom_keyword, do_parse, many0, named, punct, syn, synom::Synom};
+use syn::{alt, braces, call, custom_keyword, keyword, do_parse, many0, named, option, punct, syn, synom::Synom};
 use unicode_xid::UnicodeXID;
 
 pub struct Root(pub(crate) Describe);
@@ -96,6 +96,7 @@ impl Synom for Describe {
 
 #[derive(Clone)]
 pub struct It {
+    pub is_async: bool,
     pub name: syn::Ident,
     pub attributes: Vec<syn::Attribute>,
     pub block: syn::Block,
@@ -105,12 +106,14 @@ impl Synom for It {
     named!(parse -> Self, do_parse!(
         attrs:   many0!(call!(syn::Attribute::parse_outer))         >>
 
+        r#async: option!(alt!(keyword!(async)))                     >>
         alt!(custom_keyword!(it) | custom_keyword!(test))           >>
 
         name:    syn!(syn::LitStr)                                  >>
         block:   syn!(syn::Block)                                   >>
 
         (It {
+            is_async: r#async.is_some(),
             name: litstr_to_ident(&name),
             attributes: attrs,
             block

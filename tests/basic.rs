@@ -1,8 +1,12 @@
 extern crate speculate as other_speculate;
 use other_speculate::speculate;
 
-pub fn zero() -> u32 {
+fn zero() -> u32 {
     0
+}
+
+async fn one() -> u32 {
+    1
 }
 
 speculate! {
@@ -24,6 +28,12 @@ speculate! {
 
     it "works at level 1!" {
         assert_eq!(i, zero() + 1);
+        i = 5;
+    }
+
+    #[async_attributes::test]
+    async it "is asynchronous!" {
+        assert_eq!(i, one().await);
         i = 5;
     }
 

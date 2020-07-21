@@ -66,13 +66,22 @@ impl Generate for It {
         let name = Ident::new(&format!("test_{}", self.name), self.name.span());
         let attributes = self.attributes;
 
-        quote_spanned!(name.span() =>
-            #[test]
-            #(#attributes)*
-            fn #name() {
-                #(#stmts)*
-            }
-        )
+        if self.is_async {
+            quote_spanned!(name.span() =>
+                #(#attributes)*
+                async fn #name() {
+                    #(#stmts)*
+                }
+            )
+        } else {
+            quote_spanned!(name.span() =>
+                #(#attributes)*
+                #[test]
+                fn #name() {
+                    #(#stmts)*
+                }
+            )
+        }
     }
 }
 
