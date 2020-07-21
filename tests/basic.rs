@@ -31,6 +31,7 @@ speculate! {
         i = 5;
     }
 
+    #[async_attributes::test]
     async it "is asynchronous!" {
         assert_eq!(i, one().await);
         i = 5;
